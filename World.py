@@ -28,36 +28,36 @@ class Ant(pygame.sprite.Sprite):
 
     def think(self, food_trails, nest_trails):
         if random.random() < self.freedom:
-        # The ant wants to venture on its own
-        self.move()
-        self.turn_random()
+            # The ant wants to venture on its own
+            self.move()
+            self.turn_random()
 
-    else:
-        # The ant follows food or nest trails
-        closest_food_trail = self.find_closest_trail(self.rect.center, food_trails)
-        closest_nest_trail = self.find_closest_trail(self.rect.center, nest_trails)
+        else:
+            # The ant follows food or nest trails
+            closest_food_trail = self.find_closest_trail(self.rect.center, food_trails)
+            closest_nest_trail = self.find_closest_trail(self.rect.center, nest_trails)
 
-        if closest_food_trail and closest_nest_trail:
-            # Decide whether to follow food or nest trail based on their intensities and distances
-            food_trail, food_intensity = closest_food_trail
-            nest_trail, nest_intensity = closest_nest_trail
+            if closest_food_trail and closest_nest_trail:
+                # Decide whether to follow food or nest trail based on their intensities and distances
+                food_trail, food_intensity = closest_food_trail
+                nest_trail, nest_intensity = closest_nest_trail
 
-            food_distance = self.distance_to_trail(self.rect.center, food_trail)
-            nest_distance = self.distance_to_trail(self.rect.center, nest_trail)
+                food_distance = self.distance_to_trail(self.rect.center, food_trail)
+                nest_distance = self.distance_to_trail(self.rect.center, nest_trail)
 
-            if food_intensity > nest_intensity and food_distance < nest_distance:
-                self.follow_trail(food_trail, "food")
-            else:
-                self.follow_trail(nest_trail, "nest")
+                if food_intensity > nest_intensity and food_distance < nest_distance:
+                    self.follow_trail(food_trail, "food")
+                else:
+                    self.follow_trail(nest_trail, "nest")
 
-        elif closest_food_trail:
-            self.follow_trail(closest_food_trail[0], "food")
-        elif closest_nest_trail:
-            self.follow_trail(closest_nest_trail[0], "nest")
+            elif closest_food_trail:
+                self.follow_trail(closest_food_trail[0], "food")
+            elif closest_nest_trail:
+                self.follow_trail(closest_nest_trail[0], "nest")
 
-    # Leave a trail behind
-    self.leave_trail(food_trails, self.food_trail_intensity)
-    self.leave_trail(nest_trails, self.nest_trail_intensity)
+        # Leave a trail behind
+        self.leave_trail(food_trails, self.food_trail_intensity)
+        self.leave_trail(nest_trails, self.nest_trail_intensity)
 
 
     def move(self):
@@ -98,14 +98,15 @@ class Ant(pygame.sprite.Sprite):
         trails.append((trail, intensity))
 
     def follow_trail(self, trails, trail_type):
-        if trails:
+        if isinstance(trails, (list, tuple)):
             closest_trail = None
             closest_distance = float("inf")
             for trail, intensity in trails:
-                distance = abs(math.sqrt((self.x - trail[0])**2 + (self.y - trail[1])**2))
+                distance = self.distance_to_trail(self.rect.center, trail)
                 if distance < closest_distance:
                     closest_trail = trail
                     closest_distance = distance
+
             if closest_trail:
                 trail_x, trail_y = closest_trail
                 direction = math.degrees(math.atan2(trail_y - self.y, trail_x - self.x))
@@ -124,6 +125,28 @@ class Ant(pygame.sprite.Sprite):
 
                 # Move towards the trail
                 self.move()
+        else:
+            # Handle the case when trails is not iterable
+            # Add your desired error handling logic here
+            pass
+
+    def find_closest_trail(self, position, trails):
+        closest_trail = None
+        closest_distance = float("inf")
+        for trail, intensity in trails:
+            distance = abs(math.sqrt((position[0] - trail[0])**2 + (position[1] - trail[1])**2))
+            if distance < closest_distance:
+                closest_trail = (trail, intensity)
+                closest_distance = distance
+        return closest_trail
+    
+    def turn_random(self):
+        self.direction += random.randint(-45, 45)
+
+    def distance_to_trail(self, point, trail):
+        trail_x, trail_y = trail
+        distance = math.sqrt((point[0] - trail_x) ** 2 + (point[1] - trail_y) ** 2)
+        return distance
 
 class Food(pygame.sprite.Sprite):
     def __init__(self, x, y):
