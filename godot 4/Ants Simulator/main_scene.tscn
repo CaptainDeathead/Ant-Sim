@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://tpxyi0kyhwk6"]
+
+[ext_resource type="PackedScene" uid="uid://cn4lmh7k7i5ir" path="res://nest.tscn" id="1_1ntrx"]
+
+[node name="MainScene" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+scale = Vector2(1.33146, 1.33463)
+
+[node name="Nest" parent="." instance=ExtResource("1_1ntrx")]

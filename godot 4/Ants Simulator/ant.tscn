@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://joedod7spwgy"]
+
+[ext_resource type="Script" path="res://Scripts/ant.gd" id="1_04e3x"]
+[ext_resource type="Texture2D" uid="uid://cn6ypm1uql6bn" path="res://Sprites/Ant.png" id="1_w5hyv"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_me8wg"]
+height = 50.0
+
+[node name="Ant" type="CharacterBody2D"]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_04e3x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_me8wg")
+
+[node name="Ant" type="Sprite2D" parent="."]
+position = Vector2(-1, 0)
+texture = ExtResource("1_w5hyv")

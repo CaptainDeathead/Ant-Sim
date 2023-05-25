@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://5xp3xemfbmr6"]
+
+[ext_resource type="Script" path="res://Scripts/pheromone_nest.gd" id="1_naew3"]
+[ext_resource type="Texture2D" uid="uid://wirp0u1khds7" path="res://Sprites/Pheromone Red.png" id="1_qe4pr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j6g43"]
+radius = 25.1794
+
+[node name="Pheromone_Nest" type="Area2D"]
+scale = Vector2(0.2, 0.2)
+script = ExtResource("1_naew3")
+
+[node name="PheromoneRed" type="Sprite2D" parent="."]
+texture = ExtResource("1_qe4pr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_j6g43")
